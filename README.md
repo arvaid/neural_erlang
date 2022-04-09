@@ -1,1 +1,1 @@
-# Erlang Neurális háló modul
+# Erlang Neurális háló keretrenszer
