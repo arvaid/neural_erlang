@@ -5,10 +5,13 @@
 
 %% TODO: distribute nodes equally
 equal_distribution() ->
-    fun(Neurons, Nodes, _Args) -> 
-        %% TODO: take first N neurons for each node
-        NeuronsPerNode = length(Neurons) / length(Nodes),
-        util:partition_list(Neurons, NeuronsPerNode)
+    fun (Neurons, Nodes, _Args) ->
+        N = length(Neurons),
+        M = length(Nodes),
+        if 
+            N >= M -> util:partition_list(Neurons, N div M);
+            true -> util:partition_list(Neurons, 1)
+        end
     end.
 
 %% TODO: other strategies:
