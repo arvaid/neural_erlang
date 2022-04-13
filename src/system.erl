@@ -27,10 +27,10 @@ create(empty) ->
     create(D);
 %% start network with the given structure on the current node
 create(#system_data{} = Data) ->
-    create(Data, [node()]);
+    create(Data, [self()]);
 %% same, but from file
 create(Filename) ->
-    create(Filename, [node()]).
+    create(Filename, [self()]).
 
 %% start network with nodes distributed equally (default strategy)
 create(#system_data{} = Data, Nodes) when is_list(Nodes) ->
