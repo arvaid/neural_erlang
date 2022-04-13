@@ -3,19 +3,12 @@
 
 -export([equal_distribution/0]).
 
-% example_strategy(Neurons, Nodes, _Args) ->
-%     lists:zip(Neurons, Nodes).
-
 %% TODO: distribute nodes equally
 equal_distribution() ->
-    fun(Layers, Nodes, _Args) -> 
+    fun(Neurons, Nodes, _Args) -> 
         %% TODO: take first N neurons for each node
-    
-    
-        % NeuronsPerNode = length(Layers) / length(Nodes),
-        % NeuronCntForEachNode = util:partition_list(Neurons, NeuronsPerNode),
-        % Pairs = lists:zip(NeuronCntForEachNode, Nodes),
-        ok
+        NeuronsPerNode = length(Neurons) / length(Nodes),
+        util:partition_list(Neurons, NeuronsPerNode)
     end.
 
 %% TODO: other strategies:

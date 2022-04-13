@@ -1,18 +1,16 @@
--include("layer.hrl").
 -include("strategy.hrl").
 
 -record(system_data, {
-    layers :: [#layer_data{}]
+    neurons :: [integer()]  % neuron ids
 }).
 
 -record(system_state, {
-    layers :: [#layer_state{}],  % list of neurons in the system
-    nextLayerId :: integer(),     
+    neurons :: [integer()],  % list of neurons in the system
     nextNeuronId :: integer(),
     % lambda                      % lambda function for custom behavior
     
     data :: #system_data{},
-    mappings :: [{#neuron_data{}, node()}],
+    mappings :: [{integer(), node()}],
 
     strategy :: init_strategy(),       % how to distributee neurons 
     args :: any()                 % extra arguments for strategy
