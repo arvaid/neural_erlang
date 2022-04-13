@@ -2,16 +2,20 @@
 -module(init_strategy).
 
 -export([equal_distribution/0]).
+-export([random_distribution/0]).
 
-%% TODO: distribute nodes equally
+-include("neuron.hrl").
+
 equal_distribution() ->
     fun (Neurons, Nodes, _Args) ->
         N = length(Neurons),
         M = length(Nodes),
+        lists:map(fun({Neuron, Index}) ->
         if 
-            N >= M -> util:partition_list(Neurons, N div M);
-            true -> util:partition_list(Neurons, 1)
+                M > 1 -> {Neuron#neuron_data.id, lists:nth(Index div M + 1, Nodes)};
+                M == 1 -> {Neuron#neuron_data.id, lists:nth(1, Nodes)}
         end
+        end, lists:zip(Neurons, lists:seq(1, N)))
     end.
 
 %% TODO: other strategies:
