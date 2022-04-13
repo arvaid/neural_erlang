@@ -28,3 +28,11 @@ equal_distribution() ->
 %     NeuronCnt = length(Neurons),
 %     NodeCnt = length(Nodes),
 %     ok;
+
+random_distribution() ->
+    fun (Neurons, Nodes, _Args) ->
+        M = length(Nodes),
+        lists:map(fun(Neuron) -> 
+            {Neuron#neuron_data.id, lists:nth(rand:uniform(M), Nodes)}
+        end, Neurons)
+    end.
