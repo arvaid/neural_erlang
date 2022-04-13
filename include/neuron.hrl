@@ -1,3 +1,6 @@
+-ifndef(NEURON).
+-define(NEURON, true).
+
 -record(neuron_data, {
     id :: integer(),        % unique identifier (for saving, loading and searching)
 
@@ -30,3 +33,5 @@
 
     % activation :: atom()   % name of activation function
 }).
+
+-endif.
