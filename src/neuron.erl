@@ -1,9 +1,9 @@
 %%% A single neuron process
 -module(neuron).
 
--include("neuron_state.hrl").
+-include("neuron.hrl").
 
 -export([init/1]).
 
-init(#neuron_state{}) ->
+init(#neuron_data{}) ->
     ok.

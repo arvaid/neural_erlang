@@ -1,6 +1,6 @@
 -module(db).
 
--include("neuron_state.hrl").
+-include("neuron.hrl").
 
 %% TODO: SQL compatibility
 % -define(MYSQL_CONNSTR, "DSN=localhost;UID=erlang;PWD=password").
@@ -9,19 +9,20 @@
 -export([save/1]). 
 -export([load/0, load/1]).
 
+-spec create_schema() -> any().
 create_schema() ->
     mnesia:create_schema([node()]),
     mnesia:start(),
     mnesia:create_table(neurons, [
         {type, set},
-        {record_name, neuron_state},
-        {attributes, record_info(fields, neuron_state)}
+        {record_name, neuron_data},
+        {attributes, record_info(fields, neuron_data)}
     ]),
     mnesia:stop().
 
-save(#neuron_state{} = Record) ->
+save(#neuron_data{} = Record) ->
     SaveNeuron = fun() -> 
-        mnesia:write(neurons, Record, write) 
+        mnesia:write(neurons, Record, write)
     end,
     mnesia:activity(transaction, SaveNeuron).
 

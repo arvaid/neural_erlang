@@ -6,6 +6,8 @@
 - [Erlang and the Brain](https://youtu.be/rV5P4arc2K4)
 - [Erlang and Deep Learning](https://youtu.be/iMhBEVCgPdg)
 - [A Peek Inside Erlang's OTP • Steve Vinoski • GOTO 2016](https://youtu.be/PkHZPTn1brc)
+- [Introduction to Neural Networks in Python (what you need to know) | Tensorflow/Keras](https://www.youtube.com/watch?v=aBIGJeHRZLQ)
+
 
 ## Könyvek
 
@@ -31,3 +33,9 @@ Kérdés: ETS táblát lehet-e megosztani node-ok között??
 [ETS docs](https://www.erlang.org/doc/man/ets.html)
 
 Válasz: [Nem](https://stackoverflow.com/questions/13047488/erlang-shared-ets-tables)
+
+## Loss functions
+
+ - Categorical Cross Entropy
+ - Sparse Categorical Cross Entropy
+ - Binary Cross Entropy
