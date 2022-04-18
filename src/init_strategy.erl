@@ -6,16 +6,23 @@
 
 -include("neuron.hrl").
 
+%% distribute neurons equally among nodes (if possible)
+
+% TODO: optimize this function to use the lists module less
 equal_distribution() ->
     fun (Neurons, Nodes, _Args) ->
         N = length(Neurons),
         M = length(Nodes),
-        lists:zipwith(fun(Neuron, Index) ->
-            if
-                M > 1 -> {Neuron#neuron_data.id, lists:nth(Index div M + 1, Nodes)};
-                M == 1 -> {Neuron#neuron_data.id, lists:nth(1, Nodes)}
-            end
-        end, Neurons, lists:seq(1, N))
+        Ids = lists:map(fun(Neuron) -> Neuron#neuron_data.id end, Neurons),
+        if 
+            N == 0 -> [];
+            M == 0 -> bad_arg;
+            N == M -> lists:zip(Ids, Nodes);
+            N > M, M > 1 -> lists:zipwith(fun(Id, Index) -> {Id, lists:nth((Index div M) + 1, Nodes)} end, Ids, lists:seq(1, N));
+            N > M, M == 1 -> lists:map(fun(Id) -> {Id, lists:nth(1, Nodes)} end, Ids);
+            N > M, M < 1 -> bad_arg;
+            N < M -> lists:zipwith(fun(Id, Index) -> {Id, lists:nth(M - (M div Index)+1, Nodes)} end, Ids, lists:seq(1, N))
+        end
     end.
 
 %% TODO: other strategies:
