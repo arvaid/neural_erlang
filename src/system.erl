@@ -24,13 +24,12 @@ init(#system_state{} = S) ->
 %% start an empty network on the current node
 create(empty) ->
     D = #system_data{neurons = []},
-    create(D);
-%% start network with the given structure on the current node
+%% start network with the given structure on the currently available nodes
 create(#system_data{} = Data) ->
-    create(Data, [self()]);
+    create(Data, [node()|nodes()]);
 %% same, but from file
 create(Filename) ->
-    create(Filename, [self()]).
+    create(Filename, [node()|nodes()]).
 
 %% start network with nodes distributed equally (default strategy)
 create(#system_data{} = Data, Nodes) when is_list(Nodes) ->
