@@ -1,0 +1,4 @@
+[{<<"mysql">>,
+  {git,"https://github.com/mysql-otp/mysql-otp",
+       {ref,"e5abc887d00b92daa438a1709e2b9b9ee07317bd"}},
+  0}].
