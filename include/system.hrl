@@ -1,5 +1,5 @@
 -ifndef(SYSTEM).
--define(SYSTEM, 0).
+-define(SYSTEM, true).
 
 -include("strategy.hrl").
 
