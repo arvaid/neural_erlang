@@ -1,19 +1,11 @@
 # Erlang neural net framework
 
 EKCU thesis subject
-## Compilation
-
-Open the Erlang shell.
+## Build
 
 ```console
-user@host:projetct_dir$ erl
+$ rebar3  compile
 ```
-Use make to compile the code.
-
-```erlang
-1> make:all([load]).
-```
-
 ## Usage
 
 The `system` module has the following `init` functions:
