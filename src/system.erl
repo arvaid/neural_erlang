@@ -1,15 +1,14 @@
-%% cli interface for starting the system through system_sup
+%% TODO: move all of this code into the neural module, or into its supervisor
+
+%% cli interface for starting the system through neural_sup
 -module(system).
 
 -include("system.hrl").
--include("neuron.hrl").
 
 -export([init/1]).
--export([create/1, create/2, create/3, create/4]).
+-export([create/0, create/1, create/2, create/3, create/4]).
 -export([add_neuron/0, add_neuron/2]).
 -export([delete_neuron/1]).
-% -export([add_layer/0]).
-% -export([delete_layer/1]).
 -export([restart/0]).
 -export([stop/0]).
 
@@ -17,13 +16,15 @@
 
 %%% INIT
 init(#system_state{} = S) ->
-    register(system, self()),
+    register(neural, self()),
     %% TODO: start child processes here, save PIDs in state, then start the loop
     loop(S).
 
 %% start an empty network on the current node
-create(empty) ->
+create() ->
     D = #system_data{neurons = []},
+    create(D).
+
 %% start network with the given structure on the currently available nodes
 create(#system_data{} = Data) ->
     create(Data, [node()|nodes()]);
@@ -47,12 +48,18 @@ create(Filename, Nodes, Strategy) ->
 create(#system_data{} = Data, Nodes, Strategy, StrategyArgs) ->
     Neurons = Data#system_data.neurons,
     Mappings = Strategy(Neurons, Nodes, StrategyArgs), % which neuron goes on which node
-    supervisor:start_link(?MODULE,
-                          init,
-                          [#system_state{data = Data,
-                                         mappings = Mappings,
-                                         strategy = Strategy,
-                                         args = StrategyArgs}]);
+    lists:foreach(fun({NeuronId, Node}) ->
+        N = Data#system_data.neurons,
+        D = lists:keyfind(NeuronId, 2, N),
+        %% TODO: use supervisor instead
+        spawn(Node, neuron, init, [D])
+    end, Mappings);
+    % supervisor:start_link(?MODULE,
+    %                       init,
+    %                       [#system_state{data = Data,
+    %                                      mappings = Mappings,
+    %                                      strategy = Strategy,
+    %                                      args = StrategyArgs}]);
 create(Filename, Nodes, Strategy, StrategyArgs) ->
     Data = persistence:import_neurons(Filename),
     create(Data, Nodes, Strategy, StrategyArgs).
@@ -62,13 +69,13 @@ create(Filename, Nodes, Strategy, StrategyArgs) ->
 %%% LOOP
 loop(#system_state{} = State) ->
     receive
-        {add_neuron, Inputs, Outputs, Sender} ->
+        {add_neuron, _Inputs, _Outputs, Sender} ->
             %% TODO: init neuron
             Id = State#system_state.nextNeuronId,
 
-            Neuron = #neuron_data{
-                id = Id,
-                outputs = Outputs},
+            % Neuron = #neuron_data{
+            %     id = Id,
+            %     outputs = Outputs},
 
             S = State#system_state{nextNeuronId=Id + 1},
                     % neurons=lists:append(L1, L2)}
@@ -79,7 +86,7 @@ loop(#system_state{} = State) ->
             % S = State#system_state{neurons = lists:append(N, Neuron)},
             Sender ! {ok, add_neuron},
             loop(S);
-        {delete_neuron, Id, Sender} ->
+        {delete_neuron, _Id, Sender} ->
             % {value, _, N1} = lists:keytake(Id, 1, N),
             % S = State#system_state{neurons = N1},
             Sender ! {ok, delete_neuron};
@@ -88,7 +95,7 @@ loop(#system_state{} = State) ->
             persistence:export_neurons(State, Filename),
             Sender ! {ok, export};
         {terminate, Sender} ->
-            unregister(system),
+            unregister(neural),
             Sender ! {ok, terminate, self()};
         _ ->
             loop(State)
@@ -101,10 +108,10 @@ add_neuron() ->
     add_neuron([], []).
 
 add_neuron(Inputs, Outputs) when is_list(Inputs), is_list(Outputs) ->
-    system ! {add_neuron, Inputs, Outputs, self()}.
+    neural ! {add_neuron, Inputs, Outputs, self()}.
 
 delete_neuron(Id) ->
-    system ! {delete_neuron, Id, self()}.
+    neural ! {delete_neuron, Id, self()}.
 
 % add_layer() -> ok.
 
@@ -118,4 +125,7 @@ restart() ->
     end.
 
 stop() ->
-    system ! {terminate, self()}.%%% END API
+    neural ! {terminate, self()}.
+    
+%%% END API
+
