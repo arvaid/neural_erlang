@@ -30,8 +30,8 @@ create_schema(mnesia) ->
     mnesia:start(),
     mnesia:create_table(neurons, [
         {type, set},
-        {record_name, neuron_data},
-        {attributes, record_info(fields, neuron_data)}
+        {record_name, neuron_state},
+        {attributes, record_info(fields, neuron_state)}
     ]),
     mnesia:stop();
 create_schema(mysql) ->
@@ -46,7 +46,7 @@ create_schema(mysql) ->
              end, Stmts)
         end).
 
-save(mnesia, #neuron_data{} = Record) ->
+save(mnesia, #neuron_state{} = Record) ->
     SaveNeuron = fun() -> 
         mnesia:write(neurons, Record, write)
     end,
@@ -59,15 +59,15 @@ save(mysql, neuron, Record) ->
             "INSERT INTO Neuron " ++
             "(id, label, node, code, is_started, is_busy, x,y,z, value, activation_value) " ++
             "VALUES(?, ?, ?, ?, ?, ?, ?,?,?, ?, ?)",
-            [Record#neuron_data.id, 
-             Record#neuron_data.label, 
-             Record#neuron_data.node,
-             Record#neuron_data.code,
-             Record#neuron_data.is_started,
-             Record#neuron_data.is_busy,
-             Record#neuron_data.x, Record#neuron_data.y, Record#neuron_data.z,
-             Record#neuron_data.value,
-             Record#neuron_data.activation_value])
+            [Record#neuron_state.id, 
+             Record#neuron_state.label, 
+             Record#neuron_state.node,
+             Record#neuron_state.code,
+             Record#neuron_state.is_started,
+             Record#neuron_state.is_busy,
+             Record#neuron_state.x, Record#neuron_state.y, Record#neuron_state.z,
+             Record#neuron_state.value,
+             Record#neuron_state.activation_value])
     end).
 
 load_all(mnesia) -> 

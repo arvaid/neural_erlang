@@ -17,6 +17,6 @@ init(_Args) ->
     init(node());
 
 init(Node) when is_atom(Node) ->
-    % rpc:call(Node, ?MODULE, loop, [#neuron_state{}]).
+    % rpc:call(Node, ?MODULE, loop, [#neuron_sup_state{}]).
     %% Node, M, F, A
-    spawn(Node, ?MODULE, loop, [#neuron_state{}]).
+    spawn(Node, ?MODULE, loop, [#neuron_sup_state{}]).

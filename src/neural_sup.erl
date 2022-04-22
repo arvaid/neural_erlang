@@ -29,7 +29,7 @@ start_link(Neurons, Nodes) ->
 
 start_link(Neurons, Nodes, DistributionStrategy) ->
     _Mappings = DistributionStrategy(Neurons, Nodes, []), % which neuron goes on which node
-    State = #system_state{}, %% TODO: create system state
+    State = #system_sup_state{}, %% TODO: create system state
     supervisor:start_link({local, ?SERVER}, ?MODULE, [State]).
 
 %% sup_flags() = #{strategy => strategy(),         % optional

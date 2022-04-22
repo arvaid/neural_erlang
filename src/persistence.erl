@@ -8,9 +8,9 @@
 import_neurons(Filename) ->
     {ok, Txt} = file:read_file(Filename),
     Data = binary_to_term(Txt),
-    Data#system_data{}.
+    Data#system_state{}.
 
-export_neurons(#system_data{} = Data, Filename) ->
+export_neurons(#system_state{} = Data, Filename) ->
     Txt = term_to_binary(Data),
     {ok, File} = file:open(Filename, [write]),
     file:write(File, Txt).

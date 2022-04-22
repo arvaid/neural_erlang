@@ -2,7 +2,7 @@
 -define(NEURON, true).
 
 %% save into ETS
--record(neuron_data, {
+-record(neuron_state, {
     id :: integer(),        % unique identifier (for saving, loading and searching)
     %% for external services
     label :: string(),       % label text for APIs and other services (graphics, mobile apps etc.)
@@ -27,8 +27,8 @@
 }).
 
 %% supervisor state
--record(neuron_state, {
-    data :: #neuron_data{}, % all the data that's also stored in db
+-record(neuron_sup_state, {
+    data :: #neuron_state{}, % all the data that's also stored in db
     
     supervisor :: pid(),    % supervisor PID
     nbrs :: [pid()],         % list of neighbors (supervisor PIDs, only contains outputs)

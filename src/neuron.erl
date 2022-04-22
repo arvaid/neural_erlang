@@ -27,6 +27,11 @@ sup_start(State) ->
 %% TODO: Dolgozatba beírni a protokollt
 %% később, ha több kérés jön, tudjon új workereket  csinálni, nyilvántartja ki mit csinál, ki kérte, stb.
 
+%% TODO: dolgozatban github link
+%% TODO: dolgozatban az implementációt leírni
+%% TODO: hétfő reggel meeting
+%% TODO: végén 7-8 neuronos hálózat db snapshot
+
 sup_loop(State) ->
     receive
         {Pid, Func, Args} ->
@@ -93,26 +98,26 @@ sup_loop(State) ->
 -export([init/2]).
 % -export([loop/1]).
 
-init(Node, #neuron_data{} = Data) ->
-    F = parser:eval(Data#neuron_data.code),
-    S = #neuron_state{func = F},
+init(Node, #neuron_state{} = Data) ->
+    F = parser:eval(Data#neuron_state.code),
+    S = #neuron_sup_state{func = F},
     Pid = spawn_link(Node, ?MODULE, loop, [S]),
     Pid ! {init, self()},
     Pid.
 
-% loop(#neuron_state{} = State) ->
+% loop(#neuron_sup_state{} = State) ->
 %     receive
 %         {init, From} ->
 %             ok;
 %         {set_function, Code, From} ->
-%             S = State#neuron_state{},
-%             S#neuron_state{
-%                 data = State#neuron_data{code = Code}, 
+%             S = State#neuron_sup_state{},
+%             S#neuron_sup_state{
+%                 data = State#neuron_state{code = Code}, 
 %                 func = parser:eval(Code)},
 %             From ! {ok, set_function, self()},
 %             loop(S);
 %         {do, From} ->
-%             F = State#neuron_state.func,
+%             F = State#neuron_sup_state.func,
 %             % Output = F()
 %             From ! {ok, do, self()};
 %         _ ->

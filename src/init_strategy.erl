@@ -13,7 +13,7 @@ equal_distribution() ->
     fun (Neurons, Nodes, _Args) ->
         N = length(Neurons),
         M = length(Nodes),
-        Ids = lists:map(fun(Neuron) -> Neuron#neuron_data.id end, Neurons),
+        Ids = lists:map(fun(Neuron) -> Neuron#neuron_state.id end, Neurons),
         if 
             N == 0 -> [];
             M == 0 -> bad_arg;
@@ -38,6 +38,6 @@ random_distribution() ->
     fun (Neurons, Nodes, _Args) ->
         M = length(Nodes),
         lists:map(fun(Neuron) -> 
-            {Neuron#neuron_data.id, lists:nth(rand:uniform(M), Nodes)}
+            {Neuron#neuron_state.id, lists:nth(rand:uniform(M), Nodes)}
         end, Neurons)
     end.
