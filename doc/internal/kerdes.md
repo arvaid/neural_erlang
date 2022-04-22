@@ -1,0 +1,1 @@
+Kell absztrakt a tartalomjegyzékbe?

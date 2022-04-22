@@ -2,8 +2,8 @@
 
 -export([eval/1]).
 
-%% https://grantwinney.com/how-to-evaluate-a-string-of-code-in-erlang-at-runtime/
 -spec eval(string()) -> any().
+%% TODO: refactor
 eval(Expression) ->
     {ok, Tokens, _} = erl_scan:string(Expression),
     {ok, Parsed} = erl_parse:parse_exprs(Tokens),

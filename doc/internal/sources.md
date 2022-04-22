@@ -39,3 +39,6 @@ Válasz: [Nem](https://stackoverflow.com/questions/13047488/erlang-shared-ets-ta
  - Categorical Cross Entropy
  - Sparse Categorical Cross Entropy
  - Binary Cross Entropy
+
+## Kódok:
+- https://github.com/mysql-otp/mysql-otp
