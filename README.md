@@ -1,5 +1,8 @@
 # Erlang neural net framework
 
+This is hardly WIP.
+DO NOT USE THIS IN ITS CURRENT STATE!!
+
 EKCU thesis project
 ## Build
 
